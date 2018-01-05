@@ -42,7 +42,7 @@ const elasticsearchHealthcheck = (elasticsearch, logger = nullLogger) => asclepi
   500
 );
 
-const processHealthcheck = => asclepius.healthcheck(
+const processHealthcheck = asclepius.healthcheck(
   'process',
   () => Promise.resolve(),
   500

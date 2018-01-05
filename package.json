@@ -1,13 +1,14 @@
 {
   "name": "asclepius-standard",
   "version": "1.0.0",
-  "description": "",
+  "description": "Asclepius Standard Configuration",
+  "repository": "git@github.com:ordermentum/asclepius-standard.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "John D'Agostino",
+  "license": "Apache-2.0",
   "dependencies": {
     "asclepius": "^0.0.2"
   }

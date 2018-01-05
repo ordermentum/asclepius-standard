@@ -1,6 +1,7 @@
 const asclepius = require('asclepius');
+const nullLogger = require('null-logger');
 
-const sequelizeHealthcheck = (sequelize) => asclepius.healthcheck(
+const sequelizeHealthcheck = (sequelize, logger = nullLogger) => asclepius.healthcheck(
   'psql',
   () =>
     sequelize
@@ -13,7 +14,7 @@ const sequelizeHealthcheck = (sequelize) => asclepius.healthcheck(
   500
 );
 
-const redisHealthcheck = (redis) => asclepius.healthcheck(
+const redisHealthcheck = (redis, logger = nullLogger) => asclepius.healthcheck(
   'redis',
   () =>
     new Promise((resolve, reject) => {
@@ -28,7 +29,7 @@ const redisHealthcheck = (redis) => asclepius.healthcheck(
   500
 );
 
-const elasticsearchHealthcheck = (elasticsearch) => asclepius.healthcheck(
+const elasticsearchHealthcheck = (elasticsearch, logger = nullLogger) => asclepius.healthcheck(
   'elasticsearch',
   () =>
     elasticsearch
@@ -48,12 +49,12 @@ const processHealthcheck = => asclepius.healthcheck(
 );
 
 module.exports = {
-  setup: ({ sequelize = null, redis = null, elasticsearch = null } = {}) => {
+  setup: ({ sequelize = null, redis = null, elasticsearch = null, logger = nullLogger } = {}) => {
     const healthchecks = [processHealthcheck];
 
-    if (sequelize) healthchecks.push(sequelizeHealthcheck(sequelize));
-    if (elasticsearch) healthchecks.push(elasticsearchHealthcheck(elasticsearch));
-    if (redis) healthchecks.push(redisHealthcheck(redis));
+    if (sequelize) healthchecks.push(sequelizeHealthcheck(sequelize, logger));
+    if (elasticsearch) healthchecks.push(elasticsearchHealthcheck(elasticsearch, logger));
+    if (redis) healthchecks.push(redisHealthcheck(redis, logger));
     return asclepius.makeRoute(healthchecks);
   }
 };

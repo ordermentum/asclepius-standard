@@ -5,3 +5,7 @@
 asclepius@^0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/asclepius/-/asclepius-0.0.2.tgz#9ce0ba4b90d7638b233645cc01807379e87a7609"
+
+null-logger@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/null-logger/-/null-logger-1.0.0.tgz#d6b58b5d07de49891f21a5cc2670e62016e7c0e0"

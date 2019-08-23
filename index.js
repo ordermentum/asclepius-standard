@@ -49,8 +49,8 @@ const processHealthcheck = asclepius.healthcheck(
 );
 
 module.exports = {
-  setup: ({ sequelize = null, redis = null, elasticsearch = null, logger = nullLogger } = {}) => {
-    const healthchecks = [processHealthcheck];
+  setup: ({ sequelize = null, redis = null, elasticsearch = null, logger = nullLogger } = {}, others = []) => {
+    const healthchecks = [processHealthcheck, ...others.map(o => asclepius.healthcheck(o.name, o.fn, o.timeout))];
 
     if (sequelize) healthchecks.push(sequelizeHealthcheck(sequelize, logger));
     if (elasticsearch) healthchecks.push(elasticsearchHealthcheck(elasticsearch, logger));

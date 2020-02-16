@@ -1,7 +1,7 @@
 const asclepius = require('asclepius');
 const nullLogger = require('null-logger');
 
-const sequelizeHealthcheck = (sequelize, logger = nullLogger) => asclepius.healthcheck(
+const sequelizeHealthcheck = (sequelize, logger = nullLogger, interval = 500) => asclepius.healthcheck(
   'psql',
   () =>
     sequelize
@@ -11,10 +11,10 @@ const sequelizeHealthcheck = (sequelize, logger = nullLogger) => asclepius.healt
         logger.error('PSQL Healthcheck Failed. Reason:', err);
         return Promise.reject(err.name);
       }),
-  500
+  interval
 );
 
-const redisHealthcheck = (redis, logger = nullLogger) => asclepius.healthcheck(
+const redisHealthcheck = (redis, logger = nullLogger, interval = 500) => asclepius.healthcheck(
   'redis',
   () =>
     new Promise((resolve, reject) => {
@@ -26,10 +26,10 @@ const redisHealthcheck = (redis, logger = nullLogger) => asclepius.healthcheck(
         return resolve();
       });
     }),
-  500
+  interval
 );
 
-const elasticsearchHealthcheck = (elasticsearch, logger = nullLogger) => asclepius.healthcheck(
+const elasticsearchHealthcheck = (elasticsearch, logger = nullLogger, interval = 500) => asclepius.healthcheck(
   'elasticsearch',
   () =>
     elasticsearch
@@ -39,22 +39,22 @@ const elasticsearchHealthcheck = (elasticsearch, logger = nullLogger) => asclepi
         logger.error('Elasticsearch Healthcheck Failed. Reason:', err);
         return Promise.reject('Ping Failed');
       }),
-  500
+  interval
 );
 
-const processHealthcheck = asclepius.healthcheck(
+const processHealthcheck = (interval = 500) => asclepius.healthcheck(
   'process',
   () => Promise.resolve(),
-  500
+  interval
 );
 
 module.exports = {
-  setup: ({ sequelize = null, redis = null, elasticsearch = null, logger = nullLogger } = {}) => {
-    const healthchecks = [processHealthcheck];
+  setup: ({ sequelize = null, redis = null, elasticsearch = null, logger = nullLogger, interval = 500 } = {}) => {
+    const healthchecks = [processHealthcheck(interval)];
 
-    if (sequelize) healthchecks.push(sequelizeHealthcheck(sequelize, logger));
-    if (elasticsearch) healthchecks.push(elasticsearchHealthcheck(elasticsearch, logger));
-    if (redis) healthchecks.push(redisHealthcheck(redis, logger));
+    if (sequelize) healthchecks.push(sequelizeHealthcheck(sequelize, logge, intervalr));
+    if (elasticsearch) healthchecks.push(elasticsearchHealthcheck(elasticsearch, logger, interval));
+    if (redis) healthchecks.push(redisHealthcheck(redis, logger, interval));
     return asclepius.makeRoute(healthchecks);
   }
 };

@@ -11,6 +11,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "asclepius": "^0.0.2",
-    "null-logger": "^1.0.0"
+    "null-logger": "^2.0.0"
   }
 }
